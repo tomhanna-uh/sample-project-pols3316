@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Data paragraph:
+
+The data for this research comes from a built-in R dataset based on the 1974 Motor Trend US data. It contains fuel consumption, design, and performance information for 32 automobile models from the 1973-1974 model years. The data is observational data compiled by Motor Trend. The unit of observation is the automobile model. (source: http://www.sthda.com/english/wiki/r-built-in-data-sets#mtcars-motor-trend-car-road-tests)
+
+
+```{r}
+
+my_data <- mtcars
+head(my_data)
+
+```
+
+Variables paragraph:
+
+I chose to focus on fuel efficiency in miles per gallon (mpg) as my outcome variable. The mpg is a continuous variable with a range from 10.40 to 33.9, a median of 19.2, and a mean of 20.09. The sample standard deviation is 6.027 miles per gallon. The distribution is positively skewed. For explanatory variables, I chose automobile weight (wt) and horsepower (hp). Weight is a continuous variable measured in thousands of pounds (1000 lbs) with a range from 1,513 pounds to 5,424 pounds, a mean weight of 3,217 pounds, and median weight of 3,325 pounds. The standard deviation is 0.9785 (978.5 pounds) and the distribution is irregular, with most automobiles under 4,000 pounds and three over 5,000 pounds (see histogram). Horsepower (hp) is a continuous variable with a range of 32 to 355 horsepower, a mean of 146.7 hp, and a median of 123 hp. The standard deviation is 68.5629 hp and the distribution is right skewed with only two vehicles above 300 horsepower. 
+
+```{r}
+
+summary(my_data$mpg)
+sd(my_data$mpg)
+summary(my_data$wt)
+sd(my_data$wt)
+summary(my_data$hp)
+sd(my_data$hp)
+```
+
+```{r}
+hist(my_data$mpg)
+hist(my_data$wt)
+hist(my_data$hp)
+```
+
+Relationship paragraph: 
+
+I theorize that both higher vehicle weight and higher horsepower will detract from fuel efficiency. The correlation coefficient for hp and mpg is -0.7761684. The correlation coefficient for wt and mpg is -0.8676594. Both are consistent with my theory. There may be some issue with multicollinearity as the correlation between hp and wt is 0.6587479. This is not surprising as heavier vehicles require more powerful engines. A future study should examine the interaction between weight and hp on mpg.
+
+
+```{r}
+
+cor(my_data$hp,my_data$mpg)
+cor(my_data$wt,my_data$mpg)
+cor(my_data$hp,my_data$wt)
+```
+
+Regression paragraph:
+
+I performed three OLS regressions all using mpg as the dependent variable, two single variable regressions using hp and wt individually, and one multiple regression using hp and wt as explanatory variables. Here I describe the results of the multivariate regression. The intercept, 37.22727 mpg, was significant at the .01 level. Both horsepower and weight had negative relationships with fuel efficiency that were significant at the .01 level. **The null hypothesis is rejected with regard to both weight and horsepower.** For each additional unit of horsepower, fuel efficiency decreased by .03177 miles per gallon, all else being equal. The standard error was .00903 and the t-value was -3.519. For each additional one thousand pounds of weight, fuel efficiency decreased by 3.87783 miles per gallon all else being equal.  The standard error was 0.63273 and the t-value was -6.129. The model is significant, with a p-value less than .01. With an adjusted R-squared of 0.8148, the model explains over 80% of fuel efficiency. 
+
+
+```{r}
+
+wt_model <- lm(mpg ~ wt, data = my_data)
+summary(wt_model)
+
+hp_model <- lm(mpg ~ hp, data = my_data)
+summary(hp_model)
+
+full_model <- lm(mpg ~ hp + wt, data = my_data)
+summary(full_model)
+
+```
+
+Conclusion paragraph: No paragraph example - be creative and thoughtful about what you found. Be sure to restate the outcome - "The results of the model showed convincing evidence of a relationship between both horsepower and weight and the dependent variable, fuel efficiency."
+
+
